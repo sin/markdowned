@@ -1,107 +1,47 @@
-export default function (input) {
+import { MARKDOWN_TOKEN_MAP } from './constants'
+
+export default function lexer(markdown) {
     let current = 0
-    let currentText = ''
+    let text = ''
     let tokens = []
 
+    const move = (steps = 1) => current += steps
+    const createToken = (type, value) => tokens.push({ type, value })
+    const fillText = char => text += char
     const pushText = () => {
-        if (currentText.length) {
-            tokens.push({
-                type: 'text',
-                value: currentText
-            })
-            currentText = ''
+        text.length && createToken('text', text)
+        text = ''
+    }
+    const getHeaderValue = (char, value) => {
+        while (char === '#') {
+            value = (value || '') + char
+            char = markdown[++current]
         }
+        return value
     }
 
-    while (current < input.length) {
-        let char = input[current]
+    while (current < markdown.length) {
+        let char = markdown[current]
 
-        //check for header
-        if (char === '#') {
-            let value = ''
+        if (MARKDOWN_TOKEN_MAP[char]) {
+            let { type, value } = MARKDOWN_TOKEN_MAP[char]
 
-            while (char === '#') {
-                value += char
-                char = input[++current]
+            const isHeader = type === 'header'
+            const isMatch = value && value.split('')
+                    .every((char, index) => char === markdown[current + index])
+
+            if (isMatch) move(value.length)
+            if (isHeader) value = getHeaderValue(char, value)
+
+            if (isHeader || isMatch) {
+                pushText()
+                createToken(type, value)
+                continue
             }
-
-            pushText()
-            tokens.push({
-                type: 'header',
-                value
-            })
-
-            current++
-            continue
         }
 
-        //check for new line
-        if (/\n/.test(char)) {
-
-            pushText()
-            tokens.push({
-                type: 'eol',
-                value: char
-            })
-
-            current++
-            continue
-        }
-
-        //check for bold
-        if (char === '*' && (input[current + 1] === '*')) {
-
-            pushText()
-            tokens.push({
-                type: 'bold',
-                value: '**'
-            })
-
-            current = current + 2
-            continue
-        }
-
-        //check for italic
-        if (char === '_') {
-
-            pushText()
-            tokens.push({
-                type: 'italic',
-                value: char
-            })
-
-            current++
-            continue
-        }
-
-        //check for paren
-        if (char === '(' || char === ')') {
-
-            pushText()
-            tokens.push({
-                type: 'paren',
-                value: char
-            })
-
-            current++
-            continue
-        }
-
-        //check for brace
-        if (char === '[' || char === ']') {
-
-            pushText()
-            tokens.push({
-                type: 'brace',
-                value: char
-            })
-
-            current++
-            continue
-        }
-
-        currentText += char
-        current++
+        fillText(char)
+        move()
     }
 
     pushText()
