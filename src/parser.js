@@ -21,7 +21,7 @@ export default function parser(tokens) {
         : (schema.type ? schema.type === token.type : true) &&
         (schema.value ? schema.value === token.value : true)
 
-    const isSequence = (sequence) => tokensLeft() >= sequence.length
+    const isSequence = sequence => tokensLeft() >= sequence.length
         ? sequence.every((schema, index) => is(tokens[current + index], schema))
         : false
 

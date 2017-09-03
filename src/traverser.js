@@ -3,8 +3,8 @@ const traverseArray = (array, parent, visitor) => {
 }
 
 const traverseNode = (node, parent, visitor) => {
-    const {type, value, body} = node
-    const {enter, exit} = visitor[type] || {}
+    const { type, body } = node
+    const { enter, exit } = visitor[type] || {}
 
     if (enter) enter(node, parent)
     if (body) traverseArray(body, node, visitor)

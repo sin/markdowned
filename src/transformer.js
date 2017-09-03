@@ -12,7 +12,7 @@ export default function transformer(ast) {
 
     traverser(clonedAst, {
         'TextNode': {
-            enter: function ({value}, parent) {
+            enter: function ({ value }, parent) {
                 parent._context.push({
                     type: 'TextNode',
                     value
@@ -20,7 +20,7 @@ export default function transformer(ast) {
             }
         },
         'EOL': {
-            enter: function ({value}, parent) {
+            enter: function (node, parent) {
                 parent._context.push({
                     type: 'Tag',
                     name: 'br'
