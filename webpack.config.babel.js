@@ -1,5 +1,6 @@
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import CleanWebpackPlugin from 'clean-webpack-plugin'
 import { DefinePlugin, HotModuleReplacementPlugin } from 'webpack'
 
 const LAUNCH_COMMAND = process.env.npm_lifecycle_event
@@ -23,6 +24,8 @@ const productionPluginConfig = new DefinePlugin({
     NODE_ENV: JSON.stringify('production')
   }
 })
+
+const cleanPluginConfig = new CleanWebpackPlugin(PATHS.build)
 
 const baseConfig = {
   entry: [
@@ -78,7 +81,7 @@ const productionConfig = {
     path: PATHS.build,
     filename: '[name].[chunkhash].js'
   },
-  plugins: [HtmlWebpackPluginConfig, productionPluginConfig]
+  plugins: [HtmlWebpackPluginConfig, productionPluginConfig, cleanPluginConfig]
 }
 
 export default Object.assign({}, baseConfig,
