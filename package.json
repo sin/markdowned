@@ -1,7 +1,8 @@
 {
-  "name": "simple-markdown-editor",
+  "name": "markdowned",
   "version": "1.0.0",
   "description": "Simple markdown editor and compiler",
+  "repository": "https://github.com/sin/markdowned.git",
   "main": "src/index.js",
   "author": "Mateusz Sienkan <sin.mateusz@gmail.com>",
   "license": "MIT",
