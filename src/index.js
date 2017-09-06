@@ -1,9 +1,10 @@
+import { container, markdown } from './styles.css'
 import compiler from './compiler'
 import { $, ls } from './helpers'
 $('#app').html(`
-  <div class='container'>
+  <div class='${container}'>
     <textarea class='editor'></textarea>
-    <div class="result"></div>
+    <div class="result ${markdown}"></div>
   </div>
 `)
 
