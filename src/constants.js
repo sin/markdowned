@@ -13,6 +13,7 @@ export const RIGHT_BRACE = { type: 'brace', value: ']' }
 export const HEADER = { type: 'header' }
 export const BOLD = { type: 'bold', value: '**' }
 export const ITALIC = { type: 'italic', value: '_' }
+export const CODE = { type: 'code', value: '`' }
 
 export const TOKEN_AST_MAP = {
     markdown: 'Markdown',
@@ -23,6 +24,7 @@ export const TOKEN_AST_MAP = {
     header: 'HeaderTag',
     bold: 'BoldTag',
     italic: 'ItalicTag',
+    code: 'CodeTag',
     link: 'LinkTag'
 }
 
@@ -31,6 +33,7 @@ export const TERMINATORS = {
     header: EOL,
     bold: BOLD,
     italic: ITALIC,
+    code: CODE,
     brace: BRACE
 }
 
@@ -42,5 +45,6 @@ export const MARKDOWN_TOKEN_MAP = {
     ']': RIGHT_BRACE,
     '#': HEADER,
     '*': BOLD,
-    '_': ITALIC
+    '_': ITALIC,
+    '`': CODE
 }

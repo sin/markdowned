@@ -1,6 +1,5 @@
-const traverseArray = (array, parent, visitor) => {
+const traverseArray = (array, parent, visitor) =>
     array.forEach(child => traverseNode(child, parent, visitor))
-}
 
 const traverseNode = (node, parent, visitor) => {
     const { type, body } = node
@@ -11,8 +10,6 @@ const traverseNode = (node, parent, visitor) => {
     if (exit) exit(node, parent)
 }
 
-const traverser = (ast, visitor) => {
-    traverseNode(ast, null, visitor)
-}
+const traverser = (ast, visitor) => traverseNode(ast, null, visitor)
 
 export default traverser

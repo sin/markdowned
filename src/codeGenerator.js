@@ -1,16 +1,16 @@
 import { escape } from 'lodash'
 
-const generateTextNode = node => escape(node.value)
+const generateTextNode = (node) => escape(node.value)
 
 const generateBrNode = () => `<br />\n`
 
 const generateTagNode = ({ name, attrs = [], body }) => {
     const attrsCode = attrs.map(({ name, value }) => ` ${name}='${value}'`).join('')
     const bodyCode = generateNodes(body)
-    return `<${name}${attrsCode}>${bodyCode}</${name}>\n`
+    return `<${name}${attrsCode}>${bodyCode}</${name}>`
 }
 
-const generateNode = node => node.type === 'Tag'
+const generateNode = (node) => node.type === 'Tag'
     ? (node.name === 'br' ? generateBrNode(node) : generateTagNode(node))
     : generateTextNode(node)
 

@@ -1,5 +1,5 @@
 import {
-    TOKEN_AST_MAP, TERMINATORS, MARKDOWN, TEXT, EOL, HEADER, BOLD, ITALIC,
+    TOKEN_AST_MAP, TERMINATORS, MARKDOWN, TEXT, EOL, HEADER, BOLD, ITALIC, CODE,
     PAREN, LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE
 } from './constants'
 
@@ -19,15 +19,15 @@ export default function parser(tokens) {
     const is = (token, schema) => Array.isArray(schema)
         ? schema.some(schema => is(token, schema))
         : (schema.type ? schema.type === token.type : true) &&
-        (schema.value ? schema.value === token.value : true)
+          (schema.value ? schema.value === token.value : true)
 
-    const isSequence = sequence => tokensLeft() >= sequence.length
+    const isSequence = (sequence) => tokensLeft() >= sequence.length
         ? sequence.every((schema, index) => is(tokens[current + index], schema))
         : false
 
-    const createNode = ({ type, value }, body) =>
+    const createNode = ({ type, value }, body = null) =>
         body ? { type: TOKEN_AST_MAP[type], value, body }
-            : { type: TOKEN_AST_MAP[type], value }
+             : { type: TOKEN_AST_MAP[type], value }
 
     const createChildNodes = ({ type }) => {
         let nodes = []
@@ -45,7 +45,7 @@ export default function parser(tokens) {
             return moveThen(createNode, [token])
         }
 
-        if (is(token, [HEADER, ITALIC, BOLD])) {
+        if (is(token, [HEADER, BOLD, ITALIC, CODE])) {
             const nodes = moveThen(createChildNodes, [token])
             return moveThen(createNode, [token, nodes])
         }

@@ -63,6 +63,16 @@ export default function transformer(ast) {
                 })
             }
         },
+        'CodeTag': {
+            enter: function (node, parent) {
+                node._context = []
+                parent._context.push({
+                    type: 'Tag',
+                    name: 'code',
+                    body: node._context
+                })
+            }
+        },
         'LinkTag': {
             enter: function (node, parent) {
                 node._context = []
