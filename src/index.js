@@ -1,15 +1,25 @@
-import { readFile } from 'fs'
-import lexer from './lexer'
-import parser from './parser'
-import transformer from './transformer'
-import codeGenerator from './codeGenerator'
+import compiler from './compiler'
+import { $, ls } from './helpers'
+$('#app').html(`
+  <div class='container'>
+    <textarea class='editor'></textarea>
+    <div class="result"></div>
+  </div>
+`)
 
-readFile('README.md', 'utf8', (err, data) => {
+const $result = $('.result')
+const $editor = $('.editor')
+const initialMarkdown = ls.getItem('markdown') || '# Hello world!'
 
-    const tokens = lexer(data)
-    const markdownAst = parser(tokens)
-    const htmlAst = transformer(markdownAst)
-    const html = codeGenerator(htmlAst)
+const update = () => {
+    const markdown = $editor.value()
 
-    console.log(html)
-})
+    $result.html(compiler(markdown))
+    ls.setItem('markdown', markdown)
+}
+
+$editor.value(initialMarkdown)
+$result.html(compiler(initialMarkdown))
+$editor.on('keyup', update)
+
+window.$ = $
